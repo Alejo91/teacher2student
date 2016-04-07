@@ -1,0 +1,22 @@
+{% extends 'base_with_navigation.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="container">
+  <div class="row text-center">
+    {% if request.user.is_authenticated %}
+    <p> {% trans "Welcome back" %} {{ request.user.first_name }}! </p>
+    {% else %}
+    <p> 
+      {% trans "Welcome to Teacher 2 Student, the best online platform for teachers and students to work together." %}
+      <br>{% trans "If you don't have an account already join us now: " %}
+    </p>
+    <div class="text-center">
+      <a class="btn btn-lg btn-wide btn-primary" href="{% url 'users:teacher_signup' %}"> {% trans "I am a teacher" %}</a> 
+      <a class="btn btn-lg btn-wide btn-success" href="{% url 'users:student_signup' %}"> {% trans "I am a student" %}</a> 
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

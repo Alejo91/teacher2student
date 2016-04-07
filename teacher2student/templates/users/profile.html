@@ -1,0 +1,16 @@
+{% extends "base_with_navigation.html" %}
+{% load floppyforms i18n %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <h3> {% trans "Your profile" %} </h1>
+    <div class="col-md-4 text-center">
+      <form method="post">
+        {% csrf_token %}
+        {% form form using "floppyforms/layouts/bootstrap.html" %}
+          <input class="btn btn-primary btn-wide-full text-center" type="submit" value="{% trans 'Update' %}" />
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

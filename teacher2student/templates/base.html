@@ -1,0 +1,38 @@
+{% load staticfiles i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Educational platform to help teachers to work and communicate better with their students.">
+    <meta name="author" content="">
+
+    <title>Teacher 2 Student</title>
+    <!-- Latest compiled and minified CSS for Bootstrap 3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/project.css' %}">
+    {% block style %}
+    <!-- Additional stylesheets can be added here -->
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class="content">
+    {% block header %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    </div>
+    <!-- Javascript
+    ================================================== -->
+    <script src="http://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <!-- Latest compiled and minified JavaScript for Bootstrap 3 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    {% block script %}
+    <!-- Additoinal javascript can go here -->
+    {% endblock %}
+  </body>
+</html>
