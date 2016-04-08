@@ -22,4 +22,6 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="home.html"), name='home'),
     # User management
     url(r'^users/', include("users.urls", namespace="users")),
+    # Homework
+    url(r'^homework/', include("homework.urls", namespace="homework")),
 ]
