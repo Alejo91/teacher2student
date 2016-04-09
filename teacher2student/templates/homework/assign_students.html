@@ -1,10 +1,10 @@
 {% extends "base_with_navigation.html" %}
 {% load floppyforms i18n staticfiles %}
 {% block content %}
-  <link href="{% static 'css/list.css' %}" rel="stylesheet" type='text/css'>
 <div class="container">
   <div class="row">
-      <h3> {% trans "Assign students for" %} {{ homework.title }}</h3>
+    {% if schooluser_list %} 
+    <h3> {% trans "Assign students for" %} {{ homework.title }}</h3>
     <div class="col-md-3">
       <table class="table table-striped table-bordered">
         <thead>
@@ -15,9 +15,9 @@
         </thead>
         <tbody>
         <tbody>
-          {% for student in students %}
+          {% for student in schooluser_list %}
           <tr>
-            <td>{{ student.first_name }} {{ student.last_name }}</td>
+            <td id="{{ student.id }}-name">{{ student.first_name }} {{ student.last_name }}</td>
             <td>
               {% if homework in student.assigned_homeworks.all %}
               <button id="{{ student.id }}" class="btn btn-md btn-danger remove">
@@ -25,7 +25,7 @@
               </button>
               {% else %}
               <button id="{{ student.id }}" class="btn btn-md btn-info add">
-                {% trans "Add" %}
+                {% trans "Assign" %}
               </button>
               {% endif %}
             </td>
@@ -33,7 +33,11 @@
           {% endfor %}
         </tbody>
       </table>
+      {% include "pagination.html" %}
     </div>
+    {% else %} 
+    <h3>{% trans "No students to assign." %}</h3>
+    {% endif %}
   </div>
 </div>
 {% endblock %}
@@ -43,7 +47,6 @@
   $(document).ready(function () {
     function toogle_class(button) {
     // Toogle button style and text
-  		console.log(button);
   		if (button.hasClass('remove')) {
         button.removeClass('remove');
         button.removeClass('btn-danger');
@@ -52,12 +55,13 @@
 		  	button.text('Assign');
   		}
   		else {
-			button.removeClass('add');
-			button.removeClass('btn-info');
+        button.removeClass('add');
+        button.removeClass('btn-info');
 		  	button.addClass('btn-danger');
 		  	button.addClass('remove');
 		  	button.text('Remove');
   		}
+		  button.removeClass('disabled');
   	};
   	function post_assign_data(url, student, button) {
     // Send post data for Assign/Remove student to Homework 
@@ -66,26 +70,30 @@
 	        type : 'POST', // http method
 	        data : { 'homework_id': {{ homework.id }}, 'student_id': student}, // send homework id and user id
 	        success : function(result) {
-	           console.log(result);
-	           toogle_class(button);
+	          toogle_class(button);
 	        },
 	        error : function(xhr,errmsg,err) {
-	            console.log(xhr.status + ': ' + xhr.responseText);
+	          console.log(xhr.status + ': ' + xhr.responseText);
+            bootbox.alert('{% trans "Something went wrong, try reloading the page and contact us if the error persists." %}');
 	        }
 	    });
   	}
-    $(".add").click(function() {
+    $(".btn").click(function() {
       // Assign student to homework
       var student = $(this).attr('id')
-      console.log('Add');
-      console.log(student);
-      post_assign_data("{% url 'homework:add_student' %}", student, $(this))
-    });
-    $(".remove").click(function() {
-      // Remove student to homework
-      var student = $(this).attr('id')
-      console.log('Remove');
-      post_assign_data("{% url 'homework:remove_student' %}", student, $(this))
+      if ($(this).hasClass('add')) {
+          $(this).addClass('disabled');
+          post_assign_data("{% url 'homework:add_student' %}", student, $(this))
+      } else {
+        var clicked = $(this)
+        var student_name = $("#" + student + "-name").text();
+        bootbox.confirm('{% trans "You are about to remove the assignment from " %}' + student_name, function(remove) {
+          if (remove) {
+            clicked.addClass('disabled');
+            post_assign_data("{% url 'homework:remove_student' %}", student, clicked)
+          }
+        });        
+      }
       
     });
 

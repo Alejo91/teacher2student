@@ -8,7 +8,7 @@
       <div class="col-md-offset-4 col-md-4 text-center">
         <form method="post">
           {% csrf_token %}
-          {% form form using "floppyforms/layouts/bootstrap.html" %}
+          {% form form using "floppyforms/layouts/bootstrap_no_label.html" %}
           <input class="btn btn-lg btn-primary btn-wide-full text-center" type="submit" value="{% trans "Sign in" %}" />
         </form>
       </div>

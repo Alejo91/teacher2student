@@ -4,7 +4,7 @@ from floppyforms.widgets import TextInput, HiddenInput, Textarea, DateInput
 
 
 class HomeworkCreateForm(forms.ModelForm):
-    """."""
+    """Form for Homework creation and update."""
 
     class Meta:
         model = Homework
@@ -18,7 +18,7 @@ class HomeworkCreateForm(forms.ModelForm):
         }
 
 class AnswerCreateForm(forms.ModelForm):
-    """."""
+    """Form for Answer creation and update."""
 
     class Meta:
         model = Answer

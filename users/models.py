@@ -15,6 +15,12 @@ class SchoolUser(AbstractUser):
 
     def get_homework_url(self):
         if self.user_type == 'student':
-            return reverse('homework:student_list_homework', kwargs={'pk': self.id})
+            return reverse('homework:student_list_homework')
         else:
             return reverse('homework:list')
+
+    def is_teacher(self):
+        return self.user_type == 'teacher'
+
+    def is_student(self):
+        return self.user_type == 'student'

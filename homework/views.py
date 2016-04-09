@@ -87,23 +87,30 @@ class HomeworkListView(ListView):
             request, *args, **kwargs)
 
 
-
-@login_required
-def homework_assign_view(request, pk):
+class HomeworkAssignView(ListView):
     """Teacher can assign homework to students."""
-    request = check_teacher_user(request)
-    homework = get_object_or_404(Homework, id=int(pk))
-    # Check that the homework belong to the teacher
-    if homework.teacher != request.user:
-        raise PermissionDenied
-    students = SchoolUser.objects.filter(user_type='student')
-    context_data = {
-        'teacher': request.user,
-        'homework': homework,
-        'students': students,
-        'request': request
-    }
-    return render_to_response('homework/assign_students.html', context_data)
+    model = SchoolUser
+    template_name = 'homework/assign_students.html'
+    paginate_by = 10
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        request = check_teacher_user(request)
+        self.homework = get_object_or_404(Homework, id=int(self.kwargs['pk']))
+        if self.homework.teacher != request.user:
+            raise PermissionDenied
+        return super(HomeworkAssignView, self).dispatch(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeworkAssignView, self).get_context_data(**kwargs)
+        context['homework'] = self.homework
+        return context
+
+    def get_queryset(self):
+        students = SchoolUser.objects.filter(user_type='student')
+        print(students)
+        return students 
 
 
 @login_required
@@ -142,6 +149,7 @@ class HomeworkStudentAnswersView(ListView):
     """All submission versions for a student for a homework."""
     model = Answer
     template_name = 'homework/answer_list.html'
+    paginate_by = 10
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
@@ -173,6 +181,7 @@ class StudentHomeworkListView(ListView):
     """List all the student's homework."""
     model = Homework
     template_name = 'homework/student_list_homework.html'
+    paginate_by = 10
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):

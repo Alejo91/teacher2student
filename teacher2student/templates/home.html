@@ -5,11 +5,25 @@
 <div class="container">
   <div class="row text-center">
     {% if request.user.is_authenticated %}
-    <p> {% trans "Welcome back" %} {{ request.user.first_name }}! </p>
+    <h1> {% trans "Welcome" %} {{ request.user.first_name }}! </h1>
+    {% if request.user.is_teacher %}
+      {% if request.user.homework_set.exists %}
+      <a class="btn btn-lg btn-info" href="{% url 'homework:list' %}">{% trans "Homework list" %}</a>
+      {% endif %}
+      <a class="btn btn-lg btn-success" href="{% url 'homework:create' %}">{% trans "New Homework" %}</a>
+    {% elif request.user.is_student %}
+      {% if request.user.assigned_homeworks.exists %}
+      <p> {% trans "Let's get to work" %} </p>
+      <a class="btn btn-lg btn-success" href="{% url 'homework:student_list_homework' %}">{% trans "My assignments" %}</a>
+      {% else %}
+      <p> {% trans "You don't have any assigned homework yet." %} <p/>
+      {% endif %}
+    {% endif %}
     {% else %}
+    <h1> {% trans "Welcome to Teacher 2 Student" %}</h1>
     <p> 
-      {% trans "Welcome to Teacher 2 Student, the best online platform for teachers and students to work together." %}
-      <br>{% trans "If you don't have an account already join us now: " %}
+      {% trans "This is the best online platform for teachers and students to work together." %}
+      <br>{% trans "If you don't have an account already join us now!" %}
     </p>
     <div class="text-center">
       <a class="btn btn-lg btn-wide btn-primary" href="{% url 'users:teacher_signup' %}"> {% trans "I am a teacher" %}</a> 

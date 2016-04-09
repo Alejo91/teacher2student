@@ -23,7 +23,7 @@ urlpatterns = [
     # URL pattern for choosing new assignees
     url(
         regex=r'^(?P<pk>\d+)/assign$',
-        view=views.homework_assign_view,
+        view=views.HomeworkAssignView.as_view(),
         name='assign_student_list'
     ),
     # URL pattern for adding assignment
@@ -46,7 +46,7 @@ urlpatterns = [
     ),
     # URL pattern for list of student's homework
     url(
-        regex=r'^student/(?P<pk>\d+)/all$',
+        regex=r'^student/all$',
         view=views.StudentHomeworkListView.as_view(),
         name='student_list_homework'
     ),
