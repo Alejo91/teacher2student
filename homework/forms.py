@@ -14,7 +14,7 @@ class HomeworkCreateForm(forms.ModelForm):
             'question': Textarea(attrs={
                 'placeholder': 'Write the question for this homework.',
                 'rows': 4}),
-            'due_date': DateInput
+            'due_date': DateInput(attrs={'placeholder': 'YYYY-MM-DD or MM/DD/YYYY'})
         }
 
 class AnswerCreateForm(forms.ModelForm):

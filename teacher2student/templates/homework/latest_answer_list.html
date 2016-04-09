@@ -3,19 +3,19 @@
 {% block content %}
 <div class="container">
     <div class="col-md-8">
-      <h3>{% blocktrans %} Answers from {{ student }} {% endblocktrans %} </h3>
+      <h3>{% blocktrans %} Latest answers for {{ homework }} by student {% endblocktrans %} </h3>
       <table class="table table-striped table-bordered">
         <thead>
           <tr>
-            <th>{% trans "Date" %}</th>
-            <th>{% trans "Answer" %}</th>
+            <th>{% trans "Student" %}</th>
+            <th>{% trans "Latest Answer" %}</th>
           </tr>
         </thead>
         <tbody>
           {% for answer in answer_list %}
           <tr>
-            <td class="col-md-4">{{ answer.pub_date }}</td>
-            <td class="col-md-8">{{ answer.description }}</td>
+            <td class="col-md-3"><a href="{% url 'homework:student_answers' homework.id answer.student.id %}">{{ answer.student }}</a></td>
+            <td class="col-md-9">{{ answer.description }}</td>
           </tr>
           {% endfor %}
         </tbody>

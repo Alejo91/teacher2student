@@ -86,6 +86,8 @@ class HomeworkListView(ListView):
         return super(HomeworkListView, self).dispatch(
             request, *args, **kwargs)
 
+    def get_queryset(self):
+        return Homework.objects.filter(teacher=self.request.user)
 
 class HomeworkAssignView(ListView):
     """Teacher can assign homework to students."""
@@ -108,9 +110,7 @@ class HomeworkAssignView(ListView):
         return context
 
     def get_queryset(self):
-        students = SchoolUser.objects.filter(user_type='student')
-        print(students)
-        return students 
+        return SchoolUser.objects.filter(user_type='student')
 
 
 @login_required
@@ -154,26 +154,57 @@ class HomeworkStudentAnswersView(ListView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         request = check_teacher_user(request)
-        self.request.homework = get_object_or_404(
+        self.homework = get_object_or_404(
             Homework, id=int(self.kwargs['pk']))
+        self.student = get_object_or_404(
+            SchoolUser, id=self.kwargs['student'])
         # Check that the homework belong to the teacher
-        if homework.teacher != request.user:
+        if self.homework.teacher != request.user:
             raise PermissionDenied
         return super(HomeworkStudentAnswersView, self).dispatch(
             request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super(HomeworkStudentAnswersView, self).get_context_data(**kwargs)
+        context['student'] = self.student
+        return context
+
     def get_queryset(self):
-        self.request.student = get_object_or_404(
-            SchoolUser, id=self.kwargs['student'])
         answers = Answer.objects.filter(
-            homework=self.request.homework, 
-            student=self.request.student
+            homework=self.homework, 
+            student=self.student
         )
-        return answers 
+        return answers
+
 
 class HomeworkLatestAnswersView(ListView):
     """Teacher can see a list of latest submissions for a homework"""
-    pass
+    model = Answer
+    template_name = 'homework/latest_answer_list.html'
+    paginate_by = 10
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        request = check_teacher_user(request)
+        self.homework = get_object_or_404(
+            Homework, id=int(self.kwargs['pk']))
+        # Check that the homework belong to the teacher
+        if self.homework.teacher != request.user:
+            raise PermissionDenied
+        return super(HomeworkLatestAnswersView, self).dispatch(
+            request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(HomeworkLatestAnswersView, self).get_context_data(**kwargs)
+        context['homework'] = self.homework
+        return context
+
+    def get_queryset(self):
+        # Get only the latest answer for each student
+        answers = Answer.objects.filter(
+            homework=self.homework, 
+        ).order_by('student', '-pub_date').distinct('student')
+        return answers 
 
 
 ########## Students Views ##########
@@ -215,18 +246,18 @@ class AnswerCreateView(CreateView):
     def get_initial(self):
         """Add initial value for homework and student."""
         initial = super(AnswerCreateView, self).get_initial()
-        self.request.homework = get_object_or_404(
+        self.homework = get_object_or_404(
             Homework, id=int(self.kwargs['pk']))
-        initial['homework'] = self.request.homework
+        initial['homework'] = self.homework
         initial['student'] = self.request.user
         return initial
 
     def get_context_data(self, **kwargs):
         context = super(AnswerCreateView, self).get_context_data(**kwargs)
-        context['homework'] = self.request.homework
+        context['homework'] = self.homework
         # Check if student had previous answer and get latest
         answers = Answer.objects.filter(
-            homework=self.request.homework,
+            homework=self.homework,
             student=self.request.user
         )
         if answers:
@@ -235,4 +266,4 @@ class AnswerCreateView(CreateView):
         return context
 
     def get_success_url(self):
-        return reverse('homework:list')
+        return reverse('homework:student_list_homework')

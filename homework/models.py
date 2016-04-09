@@ -13,6 +13,13 @@ class Homework(models.Model):
     due_date = models.DateField(_("Due date"))
     pub_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
+    def has_answered(self, student):
+        return student.id in self.answer_set.values_list('student', flat=True)
+
+
 class Answer(models.Model):
     description = models.CharField(_("Answer"), max_length=500)
     student = models.ForeignKey(
@@ -21,3 +28,5 @@ class Answer(models.Model):
         Homework, verbose_name=_("Student"))
     pub_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return str(self.id)

@@ -13,6 +13,9 @@ class SchoolUser(AbstractUser):
     # Type of User
     user_type = models.CharField(_('Type'), choices=TYPE_USER, max_length=20, default='student')
 
+    def __str__(self):
+        return "%s %s" % (self.first_name, self.last_name)
+
     def get_homework_url(self):
         if self.user_type == 'student':
             return reverse('homework:student_list_homework')
@@ -24,3 +27,4 @@ class SchoolUser(AbstractUser):
 
     def is_student(self):
         return self.user_type == 'student'
+

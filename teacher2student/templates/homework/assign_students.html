@@ -17,7 +17,7 @@
         <tbody>
           {% for student in schooluser_list %}
           <tr>
-            <td id="{{ student.id }}-name">{{ student.first_name }} {{ student.last_name }}</td>
+            <td id="{{ student.id }}-name">{{ student }} </td>
             <td>
               {% if homework in student.assigned_homeworks.all %}
               <button id="{{ student.id }}" class="btn btn-md btn-danger remove">

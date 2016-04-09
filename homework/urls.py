@@ -38,11 +38,17 @@ urlpatterns = [
         view=views.homework_student_remove,
         name='remove_student'
     ),
+    # URL pattern for latest answers
+    url(
+        regex=r'^(?P<pk>\d+)/answers$',
+        view=views.HomeworkLatestAnswersView.as_view(),
+        name='latest_answers'
+    ),
     # URL pattern for all answers for a student
     url(
-        regex=r'^(?P<pk>\d+)/student/(?P<student>\d+)$',
+        regex=r'^(?P<pk>\d+)/answers/(?P<student>\d+)$',
         view=views.HomeworkStudentAnswersView.as_view(),
-        name='homework_student_list'
+        name='student_answers'
     ),
     # URL pattern for list of student's homework
     url(
