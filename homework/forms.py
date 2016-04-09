@@ -1,7 +1,7 @@
 from homework.models import Homework, Answer
 import floppyforms.__future__ as forms
-from floppyforms.widgets import TextInput, HiddenInput, Textarea
-from teacher2student.custom_widgets import DatePicker
+from floppyforms.widgets import TextInput, HiddenInput, Textarea, DateInput
+
 
 class HomeworkCreateForm(forms.ModelForm):
     """."""
@@ -14,9 +14,7 @@ class HomeworkCreateForm(forms.ModelForm):
             'question': Textarea(attrs={
                 'placeholder': 'Write the question for this homework.',
                 'rows': 4}),
-            'due_date': DatePicker(attrs={
-                'placeholder': 'Select due date'}
-            )
+            'due_date': DateInput
         }
 
 class AnswerCreateForm(forms.ModelForm):

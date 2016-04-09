@@ -1,0 +1,18 @@
+{% extends "base_with_navigation.html" %}
+{% load floppyforms i18n %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <form method="post">
+        {% csrf_token %}
+        {% formrow  form.title using "floppyforms/rows/bootstrap.html" %}
+        {% formrow form.question using "floppyforms/rows/bootstrap.html" %}
+        {% formrow form.due_date %}
+        {{ form.teacher }}
+        <input class="btn btn-primary btn-wide-full text-center" type="submit" value="{% trans "Create" %}" />
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,20 @@
+{% extends "base_with_navigation.html" %}
+{% load floppyforms i18n %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <h3> {% trans "Question :" %} {{ homework.question }} </h3>
+      <form method="post">
+        {% csrf_token %}
+        {% form form using "floppyforms/layouts/bootstrap.html" %}
+        <input class="btn btn-primary btn-wide-full text-center" type="submit" value="Submit" />
+        {% formrow form.teacher %}
+      </form>
+      {% if last_answer %}
+        <p> {% trans "Your last answer :"%}  {{ last_answer.description }} </p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

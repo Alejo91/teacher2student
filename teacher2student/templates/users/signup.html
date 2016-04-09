@@ -1,13 +1,16 @@
 {% extends "base.html" %}
-{% load floppyforms %}
+{% load floppyforms i18n %}
 {% block content %}
 <div class="container">
   <div class="row">
-    <div class="col-md-offset-4 col-md-3 text-center">
+      {% with user_type=form.user_type.value %}
+      <h3 class="text-center"> {% blocktrans %} Signing up as a {{ user_type }} {% endblocktrans %}</h3>
+      {% endwith %}
+    <div class="col-md-offset-4 col-md-4 text-center">
       <form method="post">
         {% csrf_token %}
         {% form form using "floppyforms/layouts/bootstrap.html" %}
-        <input class="btn btn-primary btn-wide-full" type="submit" value="Sign Up" />
+        <input class="btn btn-lg btn-primary btn-wide-full" type="submit" value="{% trans "Sign Up" %}" />
       </form>
     </div>
   </div>

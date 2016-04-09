@@ -54,6 +54,6 @@ urlpatterns = [
     url(
         regex=r'^(?P<pk>\d+)/answer/new$',
         view=views.AnswerCreateView.as_view(),
-        name='student_list_homework'
+        name='new_answer'
     ),
 ]
