@@ -4,7 +4,12 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install coveralls
+before_script:
+  - psql -c 'create database db_teacher2_student;' -U postgres
 script:
+  - python manage.py collectstatic --no-input
   - python manage.py test users
   - coverage run --source=users manage.py test users
+env:
+  - DATABASE_URL='postgres://127.0.0.1:5432/db_teacher2student?user=postgres'
 after_success: coveralls
