@@ -24,7 +24,8 @@ class UsersTests(TestCase):
         )
         self.teacher.set_password('1234')
         self.teacher.save()
-        self.signup_url = reverse('users:student_signup')
+        self.signup_student_url = reverse('users:student_signup')
+        self.signup_teacher_url = reverse('users:teacher_signup')
         self.signin_url = reverse('users:signin')
         self.update_url = reverse('users:profile')
 
@@ -34,7 +35,7 @@ class UsersTests(TestCase):
         post = {'email': 'student1@test.com', 'first_name': 'Tom',
                 'last_name': 'Student', 'user_type': 'student',
                 'password': '1234'}
-        response = self.client.post(self.signup_url, post)
+        response = self.client.post(self.signup_student_url, post)
         self.assertRedirects(response, reverse('home'))
         SchoolUser.objects.get(username='student1@test.com')
 
@@ -43,7 +44,7 @@ class UsersTests(TestCase):
         post = {'email': 'teacher1@test.com', 'first_name': 'Tim',
                 'last_name': 'Teacher', 'user_type': 'teacher',
                 'password': '1234'}
-        response = self.client.post(self.signup_url, post)
+        response = self.client.post(self.signup_teacher_url, post)
         self.assertRedirects(response, reverse('home'))
         SchoolUser.objects.get(username='teacher1@test.com')
 
@@ -68,6 +69,11 @@ class UsersTests(TestCase):
 
     def test_teacher_login_logout(self):
         """Test view for student Signin."""
+        # Test Login failed
+        post = {'username_or_email': 'teacher_bad@test.com', 'password': '1234'}
+        response = self.client.post(self.signin_url, post)
+        # If there is no redirection the loged in failed
+        self.assertEqual(response.status_code, 200)
         # Test classic login
         post = {'username_or_email': 'teacher@test.com', 'password': '1234'}
         response = self.client.post(self.signin_url, post)
