@@ -42,7 +42,6 @@ class CreateUserBaseView(CreateView):
         )
         user.set_password(password)
         user.save()
-        print(user)
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
