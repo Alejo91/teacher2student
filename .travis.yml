@@ -7,7 +7,7 @@ install:
 script:
   - python manage.py collectstatic --no-input
   - python manage.py test users
-  - coverage run --source=users manage.py test users
+  - coverage run --source=users manage.py test users homework
 env:
   - DATABASE_URL='postgres://127.0.0.1:5432/db_teacher2student?user=postgres'
 after_success: coveralls

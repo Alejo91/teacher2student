@@ -12,7 +12,6 @@ class UsersTests(TestCase):
             user_type='student',
             first_name='Jack',
             last_name='Student',
-            password='1234'
         )
         self.teacher = SchoolUser.objects.create(
             username='teacher@test.com',
@@ -20,7 +19,6 @@ class UsersTests(TestCase):
             user_type='teacher',
             first_name='John',
             last_name='Teacher',
-            password='1234'
         )
 
     def test_users(self):

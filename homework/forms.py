@@ -1,4 +1,4 @@
-from homework.models import Homework, Answer
+from .models import Homework, Answer
 import floppyforms.__future__ as forms
 from floppyforms.widgets import TextInput, HiddenInput, Textarea, DateInput
 

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.exceptions import PermissionDenied
 from django.views.generic import CreateView, UpdateView, ListView
+from django.http import Http404
 
 from .models import Homework, Answer
 from users.models import SchoolUser 
@@ -133,17 +134,17 @@ def homework_student(request):
 
 def homework_student_add(request):
     """Assign homework to student."""
-    request = homework_student(request) 
+    request = homework_student(request)
     request.homework.student.add(request.student)
     return HttpResponse("Added")
 
 
 def homework_student_remove(request):
     """Remove homework from student."""
-    request = homework_student(request) 
+    request = homework_student(request)
     request.homework.student.remove(request.student)
     return HttpResponse("Removed")
-    
+
 
 class HomeworkStudentAnswersView(ListView):
     """All submission versions for a student for a homework."""
