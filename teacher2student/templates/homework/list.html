@@ -23,6 +23,7 @@
             <td>
               <a class="btn btn-md btn-info" href="{% url 'homework:update' homework.id %}">{% trans "Update" %}</a>
               <a class="btn btn-md btn-success" href="{% url 'homework:assign_student_list' homework.id %}">{% trans "Assign" %}</a>
+              <a class="btn btn-md btn-primary" href="{% url 'homework:latest_answers' homework.id %}">{% trans "See Answers" %}</a>
             </td>
           </tr>
           {% endfor %}
